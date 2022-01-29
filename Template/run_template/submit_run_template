@@ -1,0 +1,31 @@
+#!/bin/bash
+
+##SBATCH -c 16
+##SBATCH -N 1
+##SBATCH -t 0-20:00
+##SBATCH -p zhangyuzhong
+##SBATCH --mem=10000
+##SBATCH --mail-type=END
+
+# Set the proper # of threads for OpenMP
+# SLURM_CPUS_PER_TASK ensures this matches the number you set with -c above
+export OMP_NUM_THREADS=$SLURM_NTASKS
+#export OMP_NUM_THREADS=16
+export OMP_STACKSIZE=500m
+
+#-------------------------------------------------
+# Initialize
+#-------------------------------------------------
+log=namename.log
+
+#-------------------------------------------------
+# Start the simulation
+#-------------------------------------------------
+# Run GEOS-Chem and pipe output to log
+./gcclassic >> $log
+
+# Echo end fin
+echo '===> Run ended at' `date` >> $log
+
+exit 0
+#EOC
